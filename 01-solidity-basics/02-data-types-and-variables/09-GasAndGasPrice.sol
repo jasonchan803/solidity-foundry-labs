@@ -1,40 +1,90 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
+
 /*
-您需要为交易支付多少费用？ether
-总费用 = gas spent（实际消耗的gas） × gas price（每gas的价格）​
-费用以以太币（ETH）支付。
+Gas 和 Gas Price
 
-​​Gas​​：以太坊中计算工作的基本单位。每笔交易或智能合约操作都会消耗一定量的gas（例如：转账消耗21,000 gas，复杂合约操作可能消耗更多）。
-​​Gas Spent​​：交易实际消耗的gas量（≤ gas limit）。
-​​Gas Price​​：用户愿意为每单位gas支付的ETH价格（单位：Gwei，1 Gwei = 0.000000001 ETH）。
+交易需要支付多少费用？
+    交易费用使用 ETH 支付。
 
-Gas Limit 的两层上限​​
-​​(1) 用户设置的 Gas Limit​​
-    你为交易设定的​​最大gas用量​​（例如：发送ETH通常设21,000，合约交互可能设200,000）。
-    ​​作用​​：防止因代码错误或计算复杂导致gas无限消耗。
-    ​​实际费用​​：按min(gas spent, gas limit)计算。如果gas spent < gas limit，剩余gas会退款。
-​​(2) 区块的 Gas Limit​​
-    整个区块允许的​​最大gas总量​​（由网络动态调整，例如当前约3000万gas/区块）。
-    ​​作用​​：限制区块大小，确保网络稳定。矿工会优先打包​​gas price高​​的交易。
+交易费用的基本计算方式：
+    Gas Used × Effective Gas Price
 
-Gas 退款规则​​
-如果交易未用完设置的gas limit（例如：设50,000 gas但只用了30,000），剩余的20,000 gas会按原gas price退还。
-​​例外​​：如果交易因gas不足失败（gas spent > gas limit），已消耗的gas​​不退款​​（防止恶意攻击）。
+Gas
+    Gas 是衡量以太坊计算工作量的单位。
+    交易和智能合约操作都会消耗 Gas。
+
+Gas Used
+    交易实际消耗的 Gas 数量。
+
+Gas Price
+    每单位 Gas 的价格。
+    通常使用 Gwei 作为计价单位。
+    1 Gwei = 10^9 Wei。
+
+Gas Limit
+    交易允许消耗的最大 Gas 数量。
+    不同交易和合约操作需要的 Gas Limit 不同。
+
+Gas Limit 的两个概念：
+
+(1) Transaction Gas Limit（交易 Gas Limit）
+    单笔交易允许消耗的最大 Gas 数量。
+    用于限制交易可以执行的计算量。
+
+    如果交易实际消耗的 Gas 小于 Gas Limit，
+    未使用的 Gas 会退还给发送者。
+
+    如果交易执行过程中 Gas 耗尽，
+    交易会失败，状态修改会回滚。
+    已消耗的 Gas 不会退还。
+
+(2) Block Gas Limit（区块 Gas Limit）
+    一个区块中所有交易能够消耗的 Gas 总量上限。
+    用于限制区块内交易的总计算资源消耗。
+
+Gas Refund（Gas 退款）
+    交易未使用的 Gas 会退还给发送者。
+
+    某些操作也可能产生 Gas Refund，
+    例如清除存储数据。
+    但这类退款受以太坊协议规则和退款上限限制。
+
+Gas Fee Mechanism（Gas 费用机制）
+    现代 Ethereum 交易费用主要包含 Base Fee 和 Priority Fee。
+
+    Base Fee（基础费用）
+        由协议根据网络状况动态调整。
+        这部分费用会被销毁。
+
+    Priority Fee（优先费用 / Tip）
+        用户额外支付给验证者的费用，
+        用于激励验证者优先打包交易。
+
+    Effective Gas Price（实际 Gas 单价）
+        实际支付的每单位 Gas 价格，
+        取决于交易设置的费用参数
+        以及交易被打包时所在区块的 Base Fee。
+
+注意：
+    Gas 消耗会受到 EVM 规则、执行的操作
+    以及合约当前状态等因素影响。
+    不应将某个 Gas 数值视为所有情况下的固定消耗。
 */
+
 contract Gas {
     uint256 public i = 0;
 
-    //无限循环修改i变量，每次修改都会消耗gas，最终会导致所有gas耗尽
-    //i的状态变量也因为交易失败而回滚，最终i的变量也没有修改成功
-    //已消耗的gas不予返还
-    function forever()public {
-        while (true){
-            //i += 1 是一个 ​​SSTORE​​ 操作（修改存储变量），每次执行大约消耗：
-            //​​20,000 gas​​（如果从零值变为非零值）。
-            //​5,000 gas​​（如果只是修改已存在的值）。
+    // 无限循环修改状态变量 i
+    // 每次循环都会消耗 Gas
+    // 最终交易会因为 Gas 耗尽而失败
+    // 交易失败后，i 的状态修改也会回滚
+    // 已消耗的 Gas 不会退还
+    function forever() public {
+        while (true) {
+            // 修改状态变量会消耗 Gas
+            // SSTORE 的实际 Gas 消耗取决于存储槽的状态
             i += 1;
-            //第一次写入i变量消耗20000gas，后续每次修改消耗500gas
         }
     }
 }
