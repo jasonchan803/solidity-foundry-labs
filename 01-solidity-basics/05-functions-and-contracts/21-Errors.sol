@@ -78,12 +78,16 @@ contract Account {
         balance = balance - _amount;
         // 最后检查一遍，取款后新的余额应该小于或者等于老的余额
         assert(balance <= oldBalance);
+        // assert 不应主要作为用户输入验证手段，而是用于内部不变量/逻辑假设检查。
     }
 }
+// Solidity 0.8.0+ 默认启用整数溢出和下溢检查
+// balance + _amount 如果发生溢出，会在执行到 require 前自动 revert
+// 因此这里的 require(newBalance >= oldBalance) 是旧版本 Solidity 中常见的防溢出检查
 /*
-在Solidity 0.8.0+ 以后的版本都自带防溢出保护，溢出后会自动回滚交易，但并不代表就不需要require、rever和assert
-它们仍然有很大用处，虽然溢出后会自动回滚，交易上不会有太大的损失，但交易回滚后并不会告诉你什么原因，这个时候就
-可以使用require、rever来检查到底是哪个地方出现问题，并把错误信息反馈出来，而assert则是最后一道防线，让你知道你
-的代码是否存在严重的bug，如果没有这些错误的信息，用户在交互的时候就不会知道是什么原因导致的交易回滚，体验感会大
+虽然在Solidity 0.8.0+ 以后的版本都自带防溢出保护，溢出后会自动回滚交易，但并不代表就不需要require、rever和assert
+它们仍然有很大用处，其次溢出后 revert 仍然会消耗 Gas，而且交易 revert 后并不会告诉你什么原因，这个时候就
+可以使用require、revert来检查到底是哪个地方出现问题，并把错误信息反馈出来，而assert则是最后一道防线，让你知道你
+的代码是否存在严重的bug，如果没有这些错误的信息，用户在交互的时候就不会知道是什么原因导致的 revert ，体验感会大
 打折扣，所以防溢出只是保障了交易不受到损失，但是require、rever和assert则是可以提高用户在使用过程的体验
 */
