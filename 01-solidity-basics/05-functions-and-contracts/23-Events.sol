@@ -5,9 +5,10 @@
 pragma solidity ^0.8.26;
 
 contract Event {
-    //声明一个事件
-    //最多可以对3个参数进行indexed（可索引），注意只可索引值类型，其他类型不可以
-    //indexed可以帮助你在日志中快速的筛选出indexed后的参数
+    // 声明一个事件
+    // 一个事件最多可以有3个 indexed 参数
+    // indexed 参数可以用于筛选日志，帮助你在日志中快速的筛选出 indexed 后的参数
+    // 动态类型（如 string、bytes、数组）被 indexed 后，日志中存储的是其哈希值
     event Log(address indexed sender, string message);
     event AnotherLog();
 
