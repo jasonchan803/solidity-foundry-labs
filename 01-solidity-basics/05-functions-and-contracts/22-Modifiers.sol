@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-contract FunctionModifer {
+contract FunctionModifier {
     //我们会用下面这些变量去证明如何使用修饰器
     address public owner;
     uint256 x = 10;
@@ -57,6 +57,9 @@ contract FunctionModifer {
         if (i > 1) {
             //再次调用函数，实现递归调用自己
             decrement(i - 1);
+            // 该递归调用会再次经过 noReentrancy 修饰器
+            // 因为第一次调用已经上锁，所以第二次调用会 revert
+            // 这里是演示锁的效果，不是一个能够成功执行的递归示例
         }
     }
 }
