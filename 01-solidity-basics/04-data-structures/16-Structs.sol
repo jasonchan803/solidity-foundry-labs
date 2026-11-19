@@ -37,6 +37,7 @@ contract Todos {
         view
         returns (string memory text, bool completed)
     {
+        // 这里使用memory也可以，但这样会先将结构体复制到memory，再从内存中读取，所以这里使用storage直接引用是合理的且节省了不必要的复制
         Todo storage todo = todos[_index];
         return (todo.text, todo.completed);
     }
