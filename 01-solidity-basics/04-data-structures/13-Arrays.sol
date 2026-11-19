@@ -12,14 +12,14 @@ contract Array {
         return arr[i];
     }
     //solidity可以返回整个数组
-    //但是这个功能必须避免使用在可以无限增长度的数组
+    //对于可能无限增长的数组，应谨慎返回整个数组，避免消耗过多 Gas
     function getArr() public view returns (uint256[] memory) {
         return arr;
     }
 
     function push(uint256 i) public  {
         //在数组的末尾追加元素
-        //这使会数组长度增加1
+        //这会使数组长度增加1
         arr.push(i);
     }
 
