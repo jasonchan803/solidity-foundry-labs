@@ -109,7 +109,11 @@ contract ReentrancyGuardTransient {
 
     modifier lock() {
         assembly {
-            //检查SLOT是否为0，如果是就继续往下执行，如果不是，就回滚交易
+            // 检查SLOT是否为0，如果是就继续往下执行，如果不是，就回滚交易
+            // 在 Yul/内联汇编里，if 的判断规则是：
+            // 条件值为 0 → 视为 false，不进入 {}
+            // 条件值为 非 0 → 视为 true，进入 {}
+            // revert(0,0) 参数是 revert(内存起始位置, 长度)。(0,0) 表示回滚时不返回任何错误数据
             if tload(SLOT) { revert(0,0) }
             //上锁
             tstore(SLOT, 1)
