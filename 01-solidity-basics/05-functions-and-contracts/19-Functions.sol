@@ -33,7 +33,8 @@ contract Function {
         return (i, b, j, x, y); 
     }
 
-    //不可以使用映射类型作为函数的参数和返回值
+    // Mapping 不能作为普通函数参数或返回值传递
+    // 但可以在内部函数中使用 storage 引用来访问 Mapping
 
     //可以使用数组作为参数传入函数，参数要使用memory传入
     function arrayInput(uint256[] memory _arr) public {}
