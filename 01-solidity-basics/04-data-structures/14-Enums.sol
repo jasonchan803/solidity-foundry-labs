@@ -16,7 +16,10 @@ contract Enum {
     function get() public view returns (Status) {
         return status;
     }
-    //通过传入枚举类型的值修改当前状态
+
+    //通过传入枚举对应的索引修改状态
+    //Pending = 0, Shipped = 1, Accepted = 2, Canceled = 3
+    //输入超出枚举有效范围的索引会导致调用失败
     function set(Status _status) public {
         status = _status;
     }
