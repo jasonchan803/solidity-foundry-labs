@@ -5,47 +5,52 @@
 4、事件的订阅用于实时的通知和更新
 */
 
-//事件驱动框架
-//事件驱动框架合约展示了事件是如何协调和触发程序的不同阶段，例如转账开始和确认转账
+// 事件驱动框架
+// 事件驱动框架合约展示了事件是如何协调和触发程序的不同阶段，例如转账开始和确认转账
 
-//事件订阅和实时更新
-//事件订阅合约展示了如何实现事件的订阅功能，允许外部合约或者用户去订阅并接收事件发生时的实时更新，
-//这同样展示了如何去处理事件的订阅和管理订阅的生命周期
+// 事件订阅和实时更新
+// EventSubscription 合约展示了如何实现事件的订阅功能，允许外部合约或者用户订阅并在事件发出时实时接收更新，
+// 这同样展示了如何去处理事件的订阅和管理订阅的生命周期
+
+// Solidity Event 本身不会自动触发其他合约的函数调用
+// 链下程序可以监听 Event 并处理通知
+// 下面的 EventSubscription 是通过链上订阅者列表和主动函数调用实现的回调机制
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
 //事件驱动框架
 contract EventDrivenArchitecture {
-    //声明一个记录转账开始阶段的事件
+    // 声明一个记录转账开始阶段的事件
     event TransferInitiated (address indexed from, address indexed to, uint256 value);
-    //声明一个记录转账确认阶段的事件
+    // 声明一个记录转账确认阶段的事件
     event TransferConfirmed (address indexed from, address indexed to, uint256 value);
 
-    mapping (bytes32 => bool) public transferConformations;
+    mapping (bytes32 => bool) public transferConfirmations;
 
     function initiateTransfer(address to, uint256 value) public {
-        //触发转账开始事件
+        // 触发转账开始事件
         emit TransferInitiated(msg.sender, to, value);
-        //这里可以添加转账的逻辑
+        // 这里可以添加转账的逻辑
+        // 当前仅演示事件记录流程，并未真正执行转账
     }
 
     function confirmTransfer(bytes32 transferId) public {
         require(!transferConformations[transferId], "Transfer already confirmed");
         transferConformations[transferId] = true;
-        //触发转账确认事件
+        // 触发转账确认事件
         emit TransferConfirmed(msg.sender, address(this), 0);
     }
 }
 
-//事件订阅和实时更新
+// 事件订阅和实时更新
 interface IEventSubscriber {
-    //定义一个外部接口
+    // 定义一个外部接口
     function handleTransferEvent(address from, address to, uint256 value) external;
 }
 
 contract EventSubscription {
-    //声明一个记录转账的事件
+    // 声明一个记录转账的事件
     event LogTransfer(address indexed from, address indexed to, uint256 value);
 
     mapping(address => bool) public subscribers;
@@ -77,7 +82,7 @@ contract EventSubscription {
     }
 
     //转账时触发事件
-    function tansfer(address to, uint256 value) public {
+    function transfer(address to, uint256 value) public {
         //发出通知
         emit LogTransfer(msg.sender, to, value);
         //遍历所有订阅者，调用他们的handleTransferEvent方法通知他们
