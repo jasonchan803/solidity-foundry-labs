@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
-//数据会存储在临时存储中，并且在交易后自动销毁
-//确保EVM（以太坊虚拟机）版本和VM（虚拟机）版本设置为Cancun（坎昆）
+pragma solidity ^0.8.24;
+// Transient Storage 是交易期间使用的临时存储
+// 与普通 Storage 不同，Transient Storage 在交易结束后清除
+// TLOAD 和 TSTORE 分别用于读取和写入瞬态存储
+// 该功能需要支持 Cancun 升级的 EVM 环境，确保EVM（以太坊虚拟机）版本和VM（虚拟机）版本设置为Cancun（坎昆）
 
-//Storage - 数据存储在区块链上
-//Memory - 数据在函数调用结束后会自动销毁
-//Transient storage - 数据在交易结束后自动销毁
+// Storage - 数据存储在区块链上
+// Memory - 数据在函数调用结束后会自动销毁
+// Transient storage - 数据在交易结束后自动销毁
 
 interface ITest {
     function val() external view returns (uint256);
@@ -23,19 +25,19 @@ interface ITest {
         }
 */
 
-// 用于测试testing TestStorage和TestTransienStorage的合约
+// 用于测试testing TestStorage和TestTransientStorage的合约
 // 用于展示Storage（传统存储）和Transient storage（瞬态储存）之间的不同
 contract Callback {
     uint256 public val;
 
     fallback() external {
-        //因为是TestStorage或者TestTransienStorage调用这个fallback函数的，所以下面的msg.sender指TestStorage或者TestTransienStorage的地址
-        //相当于再一次调用ITest接口的指定地址的val函数，所以最后返回的值是TestStorage或者TestTransienStorage中val的值
+        //因为是TestStorage或者TestTransientStorage调用这个fallback函数的，所以下面的msg.sender指TestStorage或者TestTransientStorage的地址
+        //相当于再一次调用ITest接口的指定地址的val函数，所以最后返回的值是TestStorage或者TestTransientStorage中val的值
         val = ITest(msg.sender).val();
     }
 
     function test(address target) external {
-        //初次调用接口函数，target为实现接口的合约地址，这里指TestStorage或者TestTransienStorage的地址
+        //初次调用接口函数，target为实现接口的合约地址，这里指TestStorage或者TestTransientStorage的地址
         ITest(target).test();
     }
 }
@@ -51,7 +53,7 @@ contract TestStorage {
     }
 }
 
-contract TestTransienStorage {
+contract TestTransientStorage {
     bytes32 constant SLOT = 0;
     
     function test() public {
@@ -121,7 +123,8 @@ contract ReentrancyGuardTransient {
     }
 
     function test() external lock {
-        //忽略调用错误
+        // 此示例忽略低级 call 返回值
+        // 实际合约开发中应检查调用是否成功
         bytes memory b = "";
         msg.sender.call(b);
     }
