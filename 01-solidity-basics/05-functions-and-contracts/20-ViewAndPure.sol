@@ -17,4 +17,5 @@ contract ViewAndPure {
         return i + j;
     }
 }
-// 总结：参数常量用pure，状态依赖必view。
+// 总结：不读取或修改合约状态的函数可以声明为 pure
+// 读取合约状态但不修改状态的函数可以声明为 view
