@@ -49,14 +49,16 @@ contract Loop {
         } while (i < nums.length);
         revert("No even number found");
     }
+    // do-while 至少执行一次，因此空数组会在访问 nums[0] 时发生越界
     /*当单独作为一条完整语句时，两者效果相同：
     i++ (后缀递增);         增加1
     i = i + 1(显式加法);   同样增加1    消耗更多的Gas，比 i++ 略高（约多5 Gas）
     ​​循环条件限制​​：i < nums.length
     ​​数组长度限制​​：Solidity中数组长度最大为2^256 - 1
     ​​uint256范围​​：i作为uint256，与数组长度类型相同*/
+
     //真正需要担心溢出的场景
-    function Overflow() public pure {
+    function overflow() public pure {
         for (uint8 i = 0; i < 300; i++) { // 当i=255时，i++会溢出
             if(i == 256){
                 break;
