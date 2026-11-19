@@ -16,7 +16,7 @@ contract Enum {
     function get() public view returns (Status) {
         return status;
     }
-    //通过在输入端传入正整数修改当前状态的值
+    //通过传入枚举类型的值修改当前状态
     function set(Status _status) public {
         status = _status;
     }
