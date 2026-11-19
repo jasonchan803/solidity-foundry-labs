@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 //映射的语法是  mapping(keyType（键） => valueType（值）)
-//可以理解为pyhton的字典，存存结构同样以键值对的形式存在，映射后通过某个键查询某个值或者修改某个值
+//可以理解为Python的字典，存储结构同样以键值对的形式存在，映射后通过某个键查询某个值或者修改某个值
 /*
 一、键(Key)的类型限制
     允许使用的键类型：
@@ -61,12 +61,33 @@ contract Mapping {
     }
 }
 
+contract Mapping2 {
+    //从动态字节类型映射为无符号整数
+    mapping (bytes => uint256) public myMap;
+    
+    function get(bytes memory _byte) public view returns (uint256) {
+        //映射通常会返回一个值 也就是这个uint256
+        //如果没有设置这个值，那么会返回默认值
+        return myMap[_byte];
+    }
+
+    function set(bytes memory _byte, uint256 _i) public {
+        //通过动态字节类型 Key 设置（更新）映射的值
+        myMap[_byte] = _i;
+    }
+
+    function remove(bytes memory _byte) public  {
+        //重设该 Key 的映射的值为默认值
+        delete myMap[_byte];
+    }
+}
+
 //嵌套映射，就是在映射的值中再添加一个映射
 contract NestedMapping {
     mapping (address => mapping (uint256 => bool)) public nested;
     //从地址映射为另一个映射体
     function get(address _addr1, uint256 _i) public view returns (bool) {
-        //从可以从值中获取到另一个映射体
+        //从可以从值中获取另一个映射体
         //即使这个映射体还没有被初始化
         return nested[_addr1][_i];
     }
