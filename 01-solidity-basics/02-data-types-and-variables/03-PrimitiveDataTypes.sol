@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-contract Primitves {
+contract Primitives {
     bool public boo = true;
        
     uint8 public u8 = 1;            //uint8   ranges from 0 to 2 ** 8 - 1
