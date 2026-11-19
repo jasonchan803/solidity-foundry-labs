@@ -6,7 +6,7 @@ pragma solidity ^0.8.7;
 contract Todos {
     struct Todo {
         string text;
-        bool completed; // 默认值为 fasle
+        bool completed; // 默认值为 false
     }
 
     // 声明一个名为Todo结构体类型的动态数组
