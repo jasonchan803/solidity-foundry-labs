@@ -84,9 +84,12 @@ contract Child is Base {
         return privateFunc();
     } 
     */
-
     //但可以通过public接口来暴露private函数和internal函数
     //从而实现在外部合约调用内部的private函数和internal函数
+
+    // 下面三个包装函数在当前示例中是冗余的
+    // 因为父合约已经提供了对应的 public 函数以及 external 函数接口
+    // 子合约继承后可以直接使用，无需再次编写包装函数
     function Child_testPrivateFunc() public pure returns (string memory) {
         // 通过public返回private函数
         return testPrivateFunc();
@@ -100,6 +103,4 @@ contract Child is Base {
     function Child_testexternalFunc() public view returns (string memory) {
         return this.externalFunc(); 
     }
-//最后这三个函数完全没有必要，是冗余的函数，因为在父合约已经有实现返回private函数、internal函数的public接口和external函数的external接口
-//因为继承的时候就会自动继承父合约的public和external函数接口，所以在这里重新写一次这个函数就是多此一举
 }
