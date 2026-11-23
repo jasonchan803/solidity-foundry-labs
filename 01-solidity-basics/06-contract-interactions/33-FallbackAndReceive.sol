@@ -18,7 +18,9 @@ contract Fallback {
         emit Log("fallback", gasleft());
     }
 
-    // receive是fallback函数的一种变体，当msg.data为空时它会被触发
+    // receive 是专门用于接收 ETH 且 calldata 为空时的函数
+    // 当 calldata 为空且 receive 存在时，会优先触发 receive
+    // 否则在符合条件时会触发 fallback
     receive() external payable {
         emit Log("receive", gasleft());
     }
@@ -43,7 +45,7 @@ contract SendToFallback {
     }
 }
 
-// fallback可以接受字节作为输入或者输入（但不是必要）
+// fallback 可以接收 calldata 作为输入，并在声明返回类型后返回数据，但不是必须这样写
 
 //TestFallbackInput -> FallbackInputOutput -> Counter
 contract FallbackInputOutput {
