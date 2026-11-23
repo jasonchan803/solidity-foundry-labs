@@ -2,8 +2,9 @@
 pragma solidity ^0.8.26;
 
 // delegatecall是一个类似于call的低级函数
-/* 当合约A执行delegatecall调用合约B时，会用合约A的所有状态变量和上下文变量执行合约B的代码,
-你可以理解为借用合约B的函数在A合约里面执行*/
+// delegatecall 会执行目标合约的代码，但保留调用者的执行上下文
+// 包括调用者的存储、地址上下文、msg.sender 和 msg.value
+// 因此目标代码对状态变量的读写会作用于调用者的存储空间
 
 // 先部署这个合约B
 contract B {
@@ -38,6 +39,9 @@ contract A {
 
         emit DelegateResponse(success, data);
     }
+    // 实际使用时必须检查 delegatecall 的成功状态
+    // 不同合约的 Storage Layout 不匹配可能导致状态被错误修改
+    // delegatecall 执行的代码拥有调用合约存储上下文的访问能力，需谨慎使用
 
     function setVarsCall(address _contract, uint256 _num)
         public 
