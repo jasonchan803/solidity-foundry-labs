@@ -30,7 +30,8 @@ contract C is A {
 // 合约可以继承多个合约
 // 多重继承时，Solidity 使用 C3 线性化规则确定继承关系和函数解析顺序
 // super 会按照线性化后的继承链调用下一个实现
-// 简单来说 继承声明：左到右；super 解析：右到左。
+// 对于这里的多重继承结构，可以理解为继承声明从左到右排列，super 的解析顺序从右侧分支开始
+// 实际的函数解析顺序由 Solidity 的 C3 线性化规则决定
 
 contract D is B,C {
     //D.foo() returns "C"
@@ -48,8 +49,9 @@ contract E is C,B {
     }
 }
 
-//继承必须按照最基础到最派生的顺序
-//如果调转A和B的顺序会抛出编译错误
+// 多重继承的顺序需要符合 Solidity 的继承线性化规则
+// 基础合约与派生合约的排列不正确可能导致编译错误
+// 如果调转A和B的顺序会抛出编译错误
 contract F is A,B {
     function foo() public pure override (A,B) returns (string memory) {
         return super.foo();
