@@ -2,7 +2,8 @@
 public - 任何合约和外部账户都可以调用
 private - 只能在合约内部定义函数，不可以外部调用和继承
 internal - 只能在内部调用和继承
-external - 只能在合约的外部或者外部账户调用，不可以继承
+external - 可以被外部账户或其他合约调用，也可以被继承，但不能通过普通内部调用方式直接调用，不能使用 super 进行内部调用，
+可以通过 this.func() 发起外部消息调用
 */
 //状态变量可以被声明为public、private或者internal，但external不行
 
@@ -35,7 +36,7 @@ contract Base {
         return "public function called";
     }
 
-    //external函数只能被其他合约或者外部账户调用，不可以在内部调用或者继承
+    //external函数可以被其他合约或者外部账户调用，继承调用需要用特殊方法
     function externalFunc() external pure returns (string memory) {
         return "external function called";
     }
@@ -55,7 +56,7 @@ contract Base {
         调用 this.externalFunc()
     │
     ├── 创建一个新的消息调用（message call）
-    ├── 产生额外的 gas 成本（约 2600 gas）
+    ├── 产生额外的 gas 开销
     ├── 切换执行上下文
     ├── 参数通过 calldata 传递
     └── 返回值通过内存返回
@@ -95,6 +96,10 @@ contract Child is Base {
         // 通过public返回internal函数
         return testInternalFunc();
     }
-//最后这两个函数完全没有必要，是冗余的函数，因为在父合约已经有实现返回private函数和internal函数的public接口
-//因为继承的时候就会自动继承父合约的public函数接口，所以在这里重新写一次这个函数就是多此一举
+
+    function Child_testexternalFunc() public view returns (string memory) {
+        return this.externalFunc(); 
+    }
+//最后这三个函数完全没有必要，是冗余的函数，因为在父合约已经有实现返回private函数、internal函数的public接口和external函数的external接口
+//因为继承的时候就会自动继承父合约的public和external函数接口，所以在这里重新写一次这个函数就是多此一举
 }
