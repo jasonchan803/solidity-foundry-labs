@@ -48,7 +48,6 @@ contract D is B, C {
     /*尝试
     调用 D.foo 然后检查它的交易日志，通过 D 继承 A 、B 和 C ，但它只调用 C 然后 A
     调用 D.bar 然后检查它的交易日志，通过 D 调用 C 然后 B ，最后 A
-    虽然super调用 B 和 C ，但是只会调用一次A.foo
     */
     function foo() public override(B, C) {
         super.foo();
