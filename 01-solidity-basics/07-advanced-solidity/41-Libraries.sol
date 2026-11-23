@@ -28,7 +28,7 @@ contract TestMath {
     }
 }
 
-import "./Library.sol";
+import "./extra/Library.sol";
 
 contract TestArray {
     using Array for uint256[];
