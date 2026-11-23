@@ -1,17 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-struct Point {
-    uint256 x;
-    uint256 y;
-}
+library Array {
+    function remove(uint256[] storage arr, uint256 index) public {
+        require(arr.length > 0, "Can't remove from empty array");
+        arr[index] = arr[arr.length - 1];
+        arr.pop();
 
-error Unauthorized(address caller);
-
-function add(uint256 x, uint256 y) pure returns (uint256) {
-    return x + y;
-}
-
-contract Foo {
-    string public name = "Foo";
+    }
 }
