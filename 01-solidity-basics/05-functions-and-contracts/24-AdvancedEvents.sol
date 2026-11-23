@@ -36,8 +36,8 @@ contract EventDrivenArchitecture {
     }
 
     function confirmTransfer(bytes32 transferId) public {
-        require(!transferConformations[transferId], "Transfer already confirmed");
-        transferConformations[transferId] = true;
+        require(!transferConfirmations[transferId], "Transfer already confirmed");
+        transferConfirmations[transferId] = true;
         // 触发转账确认事件
         emit TransferConfirmed(msg.sender, address(this), 0);
     }
