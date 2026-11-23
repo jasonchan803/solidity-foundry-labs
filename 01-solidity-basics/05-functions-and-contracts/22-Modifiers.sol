@@ -20,8 +20,8 @@ contract FunctionModifier {
     //修饰器会检查调用者是否是这个合约的所有者
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");
-        //下划线只能用用于修饰器的内部
-        //如果所有者是调用者，则继续执行函数主体剩余的代码
+        // _ 只能在修饰器中使用，代表被修饰函数的执行位置
+        // 如果所有者是调用者，则继续执行函数主体剩余的代码
         _; 
     }
     
