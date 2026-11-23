@@ -57,7 +57,7 @@ contract Todos {
     }
 }
 //从外部导入结构体
-import "./StructDeclaration.sol";
+import "./extra/StructDeclaration.sol";
 
 contract Todos2 {
     Todo2[] public todos2;
