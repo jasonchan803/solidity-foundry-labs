@@ -17,7 +17,7 @@ import "./Foo.sol";
     UserRegistered,        事件
     Status                 枚举
 */
-import {Unauthorized, add as func, Point} from "./Foo.sol";
+import {Unauthorized, add as func, Point} from "./extra/Foo.sol";
 
 contract Import {
     //初始化 Foo.sol
