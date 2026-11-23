@@ -38,7 +38,7 @@ contract Enum {
 枚举的声明和导入
 从外部声明一个枚举，文件名为EnumDeclaration.sol
 */
-import "./EnumDeclaration.sol";
+import "./extra/EnumDeclaration.sol";
 
 contract Enum2 {
     Status2 public status2;
