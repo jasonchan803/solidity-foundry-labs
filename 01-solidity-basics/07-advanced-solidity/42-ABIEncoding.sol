@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-//ABI编码就是将我们的语言编码成机器听得懂的语言，所有函数调用的底层的逻辑都是通过ABI编码后执行的，ABI编码已成为一种标准
+// ABI编码就是将我们的语言编码成机器听得懂的语言，所有函数调用的底层的逻辑都是通过ABI编码后执行的，ABI编码已成为一种标准
 
 interface IERC20 {
     function transfer(address, uint256) external;
@@ -16,6 +16,10 @@ contract Token {
 }
 
 
+// abi.encodeWithSignature：通过手动提供的函数签名字符串和参数编码调用数据
+// abi.encodeWithSelector：通过手动提供的函数选择器和参数编码调用数据
+// abi.encodeCall：引用函数并根据函数原型编码参数，具有编译时类型检查优势
+// 以上方法都只负责编码调用数据，不会验证目标地址是否真正实现该函数
 contract AbiEncode {
 
     function test(address _contract, bytes calldata data) external {
@@ -37,7 +41,6 @@ contract AbiEncode {
         returns (bytes memory)
     {   
         //  隐式声明为IERC20接口,通过IERC20.transfer.selector直接引用接口中的函数选择器
-        //  仅检查selector，不检查参数
         return abi.encodeWithSelector(IERC20.transfer.selector, to, amuont);
     }
 
