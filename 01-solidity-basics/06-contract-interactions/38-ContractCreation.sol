@@ -45,7 +45,7 @@ contract CarFactory {
     }
 
     //指定盐值可预计算带转账的创建合约
-    function creare2AndSendEther(address _owner, string memory _model, bytes32 _salt)
+    function create2AndSendEther(address _owner, string memory _model, bytes32 _salt)
         public 
         payable
     {
@@ -89,9 +89,13 @@ init_code：包含合约代码 + 构造函数参数（_owner和 _model）的完�
 在CarFactory中的使用    new Car(_owner, _model)         (new Car){salt: _salt}(_owner, _model)
 
 各要素影响验证表
-修改部分                 影响层级                  地址变化幅度                    类比
-修改Car合约代码      完全改变init_code                100%不同                 更换汽车生产线
-修改_owner地址       改变参数编码部分                 局部不同                  同生产线换车主
-修改_model字符串     改变参数编码部分                 局部不同                 同生产线换车型
-修改salt值           改变主哈希输入                   100%不同                  换停车位编号
+修改部分                     影响层级                       地址变化幅度                类比
+修改Car合约代码      init_code 中的 creationCode 部分         100%不同             更换汽车生产线
+修改_owner地址       init_code 中的构造参数编码部分           100%不同             同生产线换车主
+修改_model字符串     init_code 中的构造参数编码部分           100%不同             同生产线换车型
+修改salt值           外层哈希的直接输入                       100%不同              换停车位编号
+
+相同 deployer、salt 和 init_code → 计算得到相同地址
+CREATE 的地址取决于部署者的 nonce，每部署一次 nonce 加 1，所以地址无法脱离链上状态提前确定。
+CREATE2 的地址只取决于部署者地址、salt 和 init_code，和 nonce 无关，因此可以提前算出来。
 */
