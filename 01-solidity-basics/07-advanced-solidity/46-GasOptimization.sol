@@ -3,10 +3,12 @@ pragma solidity ^0.8.26;
 
 /*
 节省gas费的方法
-1、使用calldata（只读取）代替memory（复制到内存，可读可写）
-2、使用memory复制状态变量到内存（函数）中使用
-3、提前将数组元素保存到内存中，减少读取
-4、短路评估，如果出现多个条件判断，可以使用&&操作符的短路特性，如果第一个判断为false就不会执行下一个判断，节省gas
+    1、使用calldata（只读取）代替memory（复制到内存，可读可写）
+    2、使用memory复制状态变量到内存（函数）中使用
+    3、提前将数组元素保存到内存中，减少读取
+    4、短路评估，如果出现多个条件判断，可以使用&&操作符的短路特性，如果第一个判断为false就不会执行下一个判断，节省gas
+
+实际 Gas 优化效果需要结合编译器版本、优化设置及执行场景进行测试
 */
 
 contract GasGolf {
@@ -15,7 +17,7 @@ contract GasGolf {
     /* 没有优化gas的写法
     function sumIfEvenAndLessThan99(uint256[] memory nums) external {
         for (uint i = 0; i < nums.length; i +=1) {
-            bool isEven = nums % 2 == 0;
+            bool isEven = nums[i] % 2 == 0;
             bool isLessThan99 = nums[i] < 99;
             if (isEven && isLessThan99) {
                 total += nums[i];   
