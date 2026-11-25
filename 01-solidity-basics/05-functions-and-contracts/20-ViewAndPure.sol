@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
-//Getter函数可以声明为view和pure
-//View函数会声明状态变量不会被修改
-//Pure函数会声明状态变量不能被修改和读取
+// Getter函数可以声明为View和Pure
+// View函数可以读取合约状态，但不能修改状态
+// Pure函数既不能读取也不能修改合约状态
 
 contract ViewAndPure {
     uint256 public x = 1;
@@ -17,5 +17,3 @@ contract ViewAndPure {
         return i + j;
     }
 }
-// View函数可以读取合约状态，但不能修改状态
-// Pure函数既不能读取也不能修改合约状态
