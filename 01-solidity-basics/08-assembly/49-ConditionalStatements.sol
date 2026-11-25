@@ -8,7 +8,9 @@ contract AssemblyIf {
         assembly {
             // if 条件 { code }
             // if条件为真，则执行code语句，没有else否则
-            // lt：less than 小于       gt：greater than 大于      et: equal than 等于
+            // lt：less than（小于）
+            // gt：greater than（大于）
+            // eq：equal（等于）
             if lt(x, 10) { z := 99 }
             // 如果x<10,将返回值z设为99
         }
