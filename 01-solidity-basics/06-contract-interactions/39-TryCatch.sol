@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-//Try Catch 只能在外部调用和合约创建时候的捕获错误，不能在内部调用的时候捕获错误
+// try/catch 用于捕获外部合约调用或合约创建过程中的异常
+// 不能直接用于捕获普通内部函数调用的异常
 
 contract Foo {
     address public owner;
