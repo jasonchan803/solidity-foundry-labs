@@ -25,7 +25,7 @@ contract AssemblyMath {
                 // 将 z 除以 x ，检查结果是否等于 y ，如果不等（乘法溢出），执行回滚
                 /*
                     if iszero(condition) { 
-                        // 当 condition 为 false 时执行
+                        // 当 condition 为 0/false 时执行
                         revert(0, 0) 
                     }
                 */
