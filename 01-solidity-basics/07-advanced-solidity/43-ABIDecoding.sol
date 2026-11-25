@@ -11,13 +11,13 @@ contract AbiDecode {
     
     }
 
-    function endcode(
+    function encode(
         uint256 x,
-        address adrr,
+        address addr,
         uint256[] calldata arr,
         MyStruct calldata myStruct
     ) external pure returns (bytes memory) {
-        return abi.encode(x, adrr, arr, myStruct);
+        return abi.encode(x, addr, arr, myStruct);
     }
 
 
@@ -28,10 +28,10 @@ contract AbiDecode {
             uint256 x,
             address addr,
             uint256[] memory arr,
-            MyStruct memory mySturct
+            MyStruct memory myStruct
         )
     {
         // 解码data
-        ( x, addr, arr, mySturct) = abi.decode(data, (uint256, address, uint256[], MyStruct));
+        ( x, addr, arr, myStruct) = abi.decode(data, (uint256, address, uint256[], MyStruct));
     }
 }
