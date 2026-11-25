@@ -81,12 +81,12 @@ contract CarFactory {
 init_code：包含合约代码 + 构造函数参数（_owner和 _model）的完整字节码
 
 3. 对比表格
-特性                        CREATE                               CREATE2
-地址决定因素                工厂地址 + nonce            0xFF + 工厂地址 + salt + bytecode哈希
-可否预计算地址              ❌ 否                                 ✅ 是
-参数是否影响地址            ❌ 否                                 ✅ 是
-相同输入产出                每次不同                              永远相同
-在CarFactory中的使用    new Car(_owner, _model)         (new Car){salt: _salt}(_owner, _model)
+特性                        CREATE                                        CREATE2
+地址决定因素                工厂地址 + nonce                    0xFF + 工厂地址 + salt + bytecode哈希
+可否预计算地址              ❌ 否                                         ✅ 是
+参数是否影响地址            ❌ 否                                         ✅ 是
+输入产出                   每次不同                  相同 deployer、salt 和 init_code 会计算出相同的 CREATE2 地址。
+在CarFactory中的使用    new Car(_owner, _model)               (new Car){salt: _salt}(_owner, _model)
 
 各要素影响验证表
 修改部分                     影响层级                       地址变化幅度                类比
@@ -95,7 +95,6 @@ init_code：包含合约代码 + 构造函数参数（_owner和 _model）的完�
 修改_model字符串     init_code 中的构造参数编码部分           100%不同             同生产线换车型
 修改salt值           外层哈希的直接输入                       100%不同              换停车位编号
 
-相同 deployer、salt 和 init_code → 计算得到相同地址
 CREATE 的地址取决于部署者的 nonce，每部署一次 nonce 加 1，所以地址无法脱离链上状态提前确定。
 CREATE2 的地址只取决于部署者地址、salt 和 init_code，和 nonce 无关，因此可以提前算出来。
 */
