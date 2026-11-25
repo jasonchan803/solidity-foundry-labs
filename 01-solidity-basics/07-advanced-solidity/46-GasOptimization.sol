@@ -28,20 +28,21 @@ contract GasGolf {
 
     // 优化gas的写法
     function sumIfEvenAndLessThan(uint256[] calldata nums) external {
-        //提前将状态变量复制到内存当中使用
+        // 提前将状态变量复制到内存当中使用
         uint256 _total = total;
-        //提前calldata中需要的数据复制的到内存当中，减少读取
+        // 提前calldata中需要的数据复制的到内存当中，减少读取
         uint256 len = nums.length;
 
         for (uint256 i = 0; i < len;) {
-            //提前将数组元素缓存到内存当中，减少读取
+            // 将数组元素缓存到局部变量，避免重复读取
             uint256 num = nums[i];
-            //使用&&操作符的短路特性，减少一次判断
+            // 使用&&操作符的短路特性，减少一次判断
             if (num % 2 == 0 && num < 99) {
                 _total += num;
             }
-            //递增循环天然安全，Gas用完自动停止，不会出现无限循环
-            //递减循环只要控制好循环条件，也同样可以不需要溢出检检查
+            // 当前循环通过 i < len 限制迭代次数
+            // 在此循环条件下，i 不会达到 uint256 的溢出边界
+            // 因此可以在确认边界安全后使用 unchecked 递增
             unchecked {
                 ++i;
             }
