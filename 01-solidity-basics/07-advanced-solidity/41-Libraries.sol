@@ -44,6 +44,7 @@ contract TestArray {
         return arr;
     }
 
+    // 这是一次性演示函数，第二次调用时，数组会保留第一次调用的数据，因此原来的断言不再成立。
     function testArrayRemove() public {
         
         for (uint256 i = 0; i < 3; i++) {
