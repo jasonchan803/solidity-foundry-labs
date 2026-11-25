@@ -27,7 +27,9 @@ contract AssemblyIf {
             // 如果 x 不等于 1 或 2，将 z 默认设置为 0
             default { z := 0 }
 
-            // 有点类似于Python中的if....elif....else
+            // Yul 的 switch 语句类似于 C++ 的 switch-case 结构，
+            // 根据变量 x 的值匹配对应的 case，若都不匹配则执行 default。
+            // 与 C++ 不同，Yul 的每个分支使用代码块，不需要 break。
         }
     }
 }
