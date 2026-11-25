@@ -71,13 +71,17 @@ contract CarFactory {
 }
 
 /*
-1. 普通 CREATE 的地址生成
-计算公式
-地址 = keccak256(部署者地址 ++ nonce)[12:]
+1. CREATE 地址计算公式：
+address = keccak256(RLP([deployer, nonce]))[12:]
 
 2. CREATE2 的地址生成
 计算公式
-地址 = keccak256(0xFF ++ 部署者地址 ++ salt ++ keccak256(init_code))[12:]
+地址 = keccak256(0xFF ++ deployer ++ salt ++ keccak256(init_code))[12:]
+
+其中：
+deployer：部署者地址
+nonce：部署者当前的 nonce
+RLP：Recursive Length Prefix 编码
 init_code：包含合约代码 + 构造函数参数（_owner和 _model）的完整字节码
 
 3. 对比表格
