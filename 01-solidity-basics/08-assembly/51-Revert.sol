@@ -14,7 +14,7 @@ contract AssemblyError {
                                 s(size)：要返回的数据长度（字节数）
                 */
             // 如果 x > 10，回滚交易，因为是(0, 0)所以不返回任何数据
-            if gt(x, 10) { revert(0, 32)}
+            if gt(x, 10) { revert(0, 0) }
         }
     }
 }
