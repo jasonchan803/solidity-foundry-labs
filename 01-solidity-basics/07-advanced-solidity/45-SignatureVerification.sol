@@ -15,6 +15,8 @@ pragma solidity ^0.8.26;
     3、对比恢复的签名者地址和声称的签名者的地址是否一致
 */
 
+// 以下代码主要用于记录旧版本 Web3.js 和 ethers.js 的签名调用方式。
+// 不同版本的 API 和钱包行为可能不同，实际开发应以对应版本的官方文档为准。
 contract VerifySignature {
     /*
     早期版本的Web3.js语法（2018年左右的写法（较老））
@@ -151,7 +153,7 @@ contract VerifySignature {
             v := byte(0, mload(add(sig, 96)))
 
             // 汇编会间接返回数据，所以不需要写 return (r, s, v)
-            
+            // 当前示例没有检查 ecrecover 是否返回零地址，也没有执行低 s 值规范性检查。
         }
     }
 }
