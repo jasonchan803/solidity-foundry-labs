@@ -12,7 +12,7 @@ pragma solidity ^0.8.26;
 一个合约如果想被动收到Ether必须至少有以下其中一个函数
 1、receive() external payable
 2、fallback() external payable
-如果mag.data数据为空时，receive()会被调用，否则会调用fallback()
+如果msg.data数据为空时，receive()会被调用，否则会调用fallback()
 
 哪一种方式更加好呢？
 使用 call 发送 ETH 是目前常见的方式，但需要正确处理返回值
