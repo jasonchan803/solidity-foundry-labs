@@ -4,7 +4,7 @@ pragma solidity ^0.8.26;
 // 从当前文件夹中导入
 import "./Foo.sol";
 
-// improt {特定符号的名字} from "./文件名"
+// import {特定符号的名字} from "./文件名"
 /*特定符号举例
     名字                    类型
     User,                  结构体
