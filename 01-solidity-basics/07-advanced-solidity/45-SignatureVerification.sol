@@ -63,7 +63,7 @@ contract VerifySignature {
     3、签名消息的哈希值，链下签名时（钱包内部完成）：
     # 旧版：使用浏览器
     account = "copy and paste account of signer here"
-    ethereum.request({ method: "personal_sign", params: [account, hash]}).then(console.log)
+    ethereum.request({ method: "personal_sign", params: [hash, account]}).then(console.log)
 
     # 现代ethers.js（singer方式）
     await window.ethereum.request({ method: 'eth_requestAccounts' });
