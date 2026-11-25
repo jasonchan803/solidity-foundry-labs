@@ -30,19 +30,34 @@ contract Bar {
         foo = (new Foo)(msg.sender);  // 调用者成为owner
     }
 
-    //  tryCatchExternalCall(0) => Log("external call failed")  
-    //      如果传入0   catch会抓住 require(_owner !=address(0), "invalid address") 这个错误
-    //  tryCatchExternalCall(1) => Log("my func was called")
-    //      如果传入1   try会通过   触发事件"my func was called"
+    // tryCatchExternalFoo(0)
+    //   myFunc 内 require(x != 0, "require failed") 触发 revert
+    //   被 catch Error(string memory reason) 捕获
+    //   依次触发：Log("require failed")、Log("external call failed")
+    // tryCatchExternalFoo(1)
+    //   调用成功，进入 try 分支
+    //   触发：Log("my func was called")
     function tryCatchExternalFoo(uint256 _i) public {
         try foo.myFunc(_i) returns (string memory result) {
             emit Log(result);
         } catch Error(string memory reason){
+            // 此 catch 分支用于捕获 Error(string) 类型的 revert
+            // 其他类型的异常如果没有对应的 catch 分支，仍可能向上传播
             emit Log(reason);
             emit Log("external call failed");
         }
     }
 
+    // tryCatchNewContract(address(0))
+    //   构造函数 require(_owner != address(0), "invalid address") 失败
+    //   被 catch Error(string memory reason) 捕获
+    //   触发：Log("invalid address")
+    // tryCatchNewContract(address(1))
+    //   构造函数 assert 失败，产生 Panic(uint256)
+    //   不是 Error(string)，被 catch (bytes memory reason) 捕获
+    //   触发：LogBytes(Panic 的编码数据)
+    // tryCatchNewContract(其他有效地址)
+    //   创建成功，触发：Log("Foo created")、Logaddr(新合约地址)
     function tryCatchNewContract(address _owner) public {
         try new Foo(_owner) returns (Foo Newfoo) {
             // 如果成功，try会触发事件"Foo created"，并且返回新创建的合约foo
@@ -55,7 +70,7 @@ contract Bar {
             emit Log(reason);
 
         } catch (bytes memory reason) {
-            // 如果失败，catch 会抓住 assert() 的错误
+            // 捕获其他类型的异常数据，例如 Panic(uint256) 产生的错误数据
             emit LogBytes(reason);
         }
     }
