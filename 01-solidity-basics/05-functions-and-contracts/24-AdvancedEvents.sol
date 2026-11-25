@@ -41,6 +41,8 @@ contract EventDrivenArchitecture {
         // 触发转账确认事件
         emit TransferConfirmed(msg.sender, address(this), 0);
     }
+    // 当前仅演示事件与状态记录，未验证 transferId 是否对应真实转账
+    // 实际应用中需要设计转账记录、确认权限和状态校验机制
 }
 
 // 事件订阅和实时更新
