@@ -19,7 +19,6 @@ pragma solidity ^0.8.7;
         其他映射(mapping)
         结构体(struct)
         数组(array)
-        动态长度的字节数组(bytes)
         ​​特殊类型​​：
         浮点数类型(floating point types)
         函数类型(function types)
